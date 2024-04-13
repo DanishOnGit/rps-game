@@ -20,11 +20,9 @@ app.get('/test', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    socket.on('connect',()=>{
-        console.log('a new user arrived')
-    })
+    console.log("A user has connected saaar")
     socket.on('disconnect',()=>{
-        console.log("user has disconnected")
+        console.log("user has disconnected saar")
     })
   });
 
