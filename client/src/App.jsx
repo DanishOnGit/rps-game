@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
-import { socket } from './socket.js';
 import './App.css';
+import Button from './components/Button.jsx';
+import { useSocket } from './contexts/useSocket.jsx';
+import UserAuthentication from './UserAuthentication.jsx';
 
 function App() {
+  const { socket } = useSocket()
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const [showLogin, setShowLogin] = useState(false)
 
-  const getdata=()=>{
-    const res = fetch(`${process.env.REACT_APP_API_URL}/test`).then(res=>res.json()).then(data=>console.log(data)).catch(console.error)
-  }
-
-  const disconnectSocket=()=>{
+  const disconnectSocket = () => {
     socket.disconnect()
   }
-  const connectSocket=()=>{
+  const connectSocket = () => {
     socket.connect()
   }
-  useEffect(()=>{
-    getdata()
-  },[])
+
 
   useEffect(() => {
     function onConnect() {
@@ -48,13 +46,10 @@ function App() {
 
   return (
     <>
-      Hii
-      <button onClick={disconnectSocket}>
-        Disconnect
-      </button>
-      <button onClick={connectSocket}>
-        Connect
-      </button>
+      <Button text={"Connect"} onClick={connectSocket} />
+      <Button text={"Disconnect"} onClick={disconnectSocket} />
+      <Button text={"Play"} onClick={()=>setShowLogin(true)}/>
+      {showLogin && <UserAuthentication />}
     </>
   )
 }
