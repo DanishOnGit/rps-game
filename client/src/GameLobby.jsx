@@ -4,13 +4,19 @@ import Button from './components/Button'
 import { useSocket } from './contexts/useSocket';
 
 const GameLobby = () => {
-    const { currentPlayers} = useUserContext();
+    const { currentPlayers,setCurrentPlayers} = useUserContext();
     const {socket}=useSocket()
     const startGame=()=>{
         socket.emit("createGame",(res)=>{
             console.log({res})
         })
     }
+
+    useEffect(()=>{
+        socket.emit('getAllPlayers',(data)=>{
+            setCurrentPlayers(data)
+        })
+    },[])
 
     return (
         <div>

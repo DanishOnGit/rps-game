@@ -42,8 +42,12 @@ function App() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
-    socket.on('allOnlinePlayers',updateOnlinePlayers)
-
+    socket.on('updatePlayerList',updateOnlinePlayers)
+    socket.on('usernameNotUnique',()=>alert("Enter a unique username"))
+    socket.on('playerLeft',(data)=>{
+      console.log({data})
+      setCurrentPlayers(prev=>prev.filter(player=>player.id!==data.id))
+    })
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
