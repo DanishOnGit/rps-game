@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useUserContext } from './contexts/userContext'
 import Button from './components/Button'
 import { useSocket } from './contexts/useSocket';
 
 const GameLobby = () => {
-    const { currentPlayers } = useUserContext();
+    const { currentPlayers} = useUserContext();
     const {socket}=useSocket()
     const startGame=()=>{
         socket.emit("createGame",(res)=>{
             console.log({res})
         })
     }
+
     return (
         <div>
             {

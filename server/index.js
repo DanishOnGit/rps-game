@@ -13,6 +13,8 @@ const io = new Server(server,{
     }
 })
 
+const players=[]
+
 const rooms={}
 
 app.get('/', (req, res) => {
@@ -23,7 +25,12 @@ app.get('/test', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log("A user has connected saaar")
+    console.log("A user has connected sir")
+    socket.on("newPlayerJoined",(data)=>{
+      console.log({newplayerdata:data})
+      players.push(data)
+      socket.broadcast.emit('allOnlinePlayers',players)
+    })
     socket.on('disconnect',()=>{
         console.log("user has disconnected saar")
     })
@@ -32,7 +39,7 @@ io.on('connection', (socket) => {
       const roomUniqueId = makeid(6);
       rooms[roomUniqueId] = {};
       socket.join(roomUniqueId);
-      socket.emit("newGame", {roomUniqueId: roomUniqueId})
+      socket.emit("newGame", {roomUniqueId: roomUniqueId});
       callback(`creating new game...in room ${roomUniqueId}`)
   });
 

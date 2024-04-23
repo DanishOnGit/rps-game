@@ -3,12 +3,13 @@ import './App.css';
 import Button from './components/Button.jsx';
 import { useSocket } from './contexts/useSocket.jsx';
 import UserAuthentication from './UserAuthentication.jsx';
+import { useUserContext } from './contexts/userContext.jsx';
 
 function App() {
   const { socket } = useSocket()
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [showLogin, setShowLogin] = useState(false)
-
+  const {setCurrentPlayers}=useUserContext()
   const disconnectSocket = () => {
     socket.disconnect()
   }
@@ -33,9 +34,15 @@ function App() {
       // setFooEvents(previous => [...previous, value]);
     }
 
+    function updateOnlinePlayers(players){
+      console.log({players})
+      setCurrentPlayers(players)
+    }
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
+    socket.on('allOnlinePlayers',updateOnlinePlayers)
 
     return () => {
       socket.off('connect', onConnect);
@@ -46,8 +53,6 @@ function App() {
 
   return (
     <>
-      <Button text={"Connect"} onClick={connectSocket} />
-      <Button text={"Disconnect"} onClick={disconnectSocket} />
       <Button text={"Play"} onClick={()=>setShowLogin(true)}/>
       {showLogin && <UserAuthentication />}
     </>
