@@ -28,9 +28,8 @@ app.get('/getAllPlayers', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log("A user has connected sir")
-
-    socket.on("joinServer",(data)=>{
+    console.log("A user has connected")
+    socket.on("joinServer",(data,cb)=>{
       console.log({newplayerdata:data})
       const isUsernameExists=players.find(player=>player.name===data.name)
       if(isUsernameExists){
@@ -39,11 +38,12 @@ io.on('connection', (socket) => {
         players.push({...data,id:socket.id})
         console.log(players)
         socket.broadcast.emit('updatePlayerList',players)
+        cb(true)
       }
     })
 
     socket.on('disconnect',()=>{
-        console.log("user has disconnected saar");
+        console.log("user has disconnected");
         const disconnectedPlayer = players.find(player => player.id === socket.id);
         if (disconnectedPlayer) {
           players = players.filter(player => player.id !== socket.id);
@@ -59,9 +59,16 @@ io.on('connection', (socket) => {
       callback(`creating new game...in room ${roomUniqueId}`)
   });
 
+  socket.on('askToPlay',(data,cb)=>{
+    cb(true)
+  })
+
   socket.on('getAllPlayers',(cb)=>{
     cb(players)
   })
+
+
+
   });
 
 server.listen(3000, () => {

@@ -16,9 +16,11 @@ const UserAuthentication = () => {
     const isAlreadyPresent = currentPlayers.find(player => player.name === username);
     if (isAlreadyPresent) return;
     socket.connect()
-    socket.emit('joinServer',{ name: username, score: 0 })
+    socket.emit('joinServer',{ name: username, score: 0 },(success)=>{
+      if(success) navigate('/lobby')
+    })
     setCurrentPlayers(prev => ([...prev, { name: username, score: 0 }]));
-    navigate('/lobby')
+    
   }
 
 
