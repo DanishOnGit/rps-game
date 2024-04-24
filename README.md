@@ -1,8 +1,8 @@
 ## Steps to run:
 Clone the repo
 
-cd client
-npm run dev
+- cd client
+- npm run dev
 
-cd server
-npm start
+- cd server
+- npm start
